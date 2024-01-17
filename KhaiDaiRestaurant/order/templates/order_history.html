@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center m-3 text-info">Order History</h1>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Food Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Category</th>
+        <th scope="col">Review FOOD</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for order in orders %}
+{% for cart_item in order.items.all %}
+                <tr>
+                <td>{{ cart_item.food_item.name }}</td>
+                <td>{{ cart_item.food_item.price }}</td>
+                <td>{{ cart_item.food_item.category.name }}</td>
+                <td><a href="{% url 'submit_review' food_item_id=cart_item.food_item.id %}" class="btn btn-info" > Reiview IT</a></td>
+                </tr>
+                {% endfor %}
+{% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}
+    
+<!-- templates/order_history.html -->

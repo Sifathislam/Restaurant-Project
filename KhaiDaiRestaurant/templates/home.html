@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block cssstyle %}
+<style>
+      .barnd_name_ul { 
+        padding: 0; 
+        list-style: none; 
+        display: table;
+        text-align: center;
+      }
+      .barnd_name_li { 
+        display: table-cell; 
+        position: relative; 
+        padding: 15px 0;
+      }
+      .barnd_name_a{
+        color: black;
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 0.15em;
+        
+        display: inline-block;
+        padding: 15px 20px;
+        position: relative;
+      }
+      .barnd_name_a:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 2px;
+        left: 50%;
+        position: absolute;
+        background: black;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+      .barnd_name_a:hover:after { 
+        width: 100%; 
+        left: 0; 
+      }
+      @media screen and (max-height: 300px) {
+        .barnd_name_ul{
+              margin-top: 40px;
+          }
+      }      
+</style>
+{% endblock cssstyle %}
+{% block content %}
+
+<div class="d-flex justify-content-center gap-5 flex-wrap">
+    {% for brand in brands %}
+    <ul class="barnd_name_ul"> 
+        <li class="barnd_name_li">
+            <a href="{% url 'brand_wise' brand.slug %}" class ="text-decoration-none text-dark barnd_name_a">{{brand.name}}</a>
+        </li>
+    </ul>
+    {% endfor %}
+</div>
+{% comment %} <div class="d-flex justify-content-center flex-wrap gap-5 algin-items-center"> {% endcomment %}
+<div class="row gap-5 m-4 ms-5 ps-5">
+    <h3 class="text-dark">Total FOOD ITEMS Found: {{data | length }}</h3>
+    {% for val in data %}
+    <div class="card col-3" style="width: 18rem;">
+        <img src="{{val.image.url}}" class="card-img-top" alt="image of the Car">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <h5 class="card-title">{{val.name}}</h5>
+          <h6 class="card-title text-secondary">{{val.price}}$</h6>
+          <h6 class="card-title">{{val.category.name}}</h6>
+          <h6 class="card-title">{{val.description | truncatewords:20 }}</h6>
+          {% if request.user.is_authenticated %}
+          {% if request.user.account.User_Type == 'admin' %}
+              <a class="btn btn-warning w-100 m-auto" aria-current="page" href="{% url 'EditFood' val.id %}">Manage Food</a>
+              <a class="btn btn-danger w-100 m-auto" aria-current="page" href="{% url 'deleteFood' val.id %}">Delete Food</a>
+          {% endif %}
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        {% if request.user.account.User_Type == 'customer' %}
+            <a class="btn btn-warning w-100 m-auto" aria-current="page" href="{% url 'menu_detail' food_item_id=val.id %}">View FOOD</a>
+            <a class="btn btn-info w-100 m-auto" aria-current="page" href="{% url 'add_to_cart' val.id %}">Add Cart</a>
+        {% endif %}
+    {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+</div>
+
+
+<div class="mt-5">
+    <h2 class="mb-4 text-center text-info">Specials</h2>
+    {% if specials %}
+    <div class="row gap-5 m-4 ms-5 ps-5">
+        <h3 class="text-dark">Spacial Discount ITEMS Found: {{specials | length }}</h3>
+        {% for val in specials %}
+        <div class="card col-3" style="width: 18rem;">
+            <img src="{{val.image.url}}" class="card-img-top" alt="image of the Car">
+            <div class="card-body text-center d-flex flex-column justify-content-center">
+              <h5 class="card-title">{{val.name}}</h5>
+              <h6 class="card-title text-secondary">Orginal Price:{{val.price}}$</h6>
+              <h6 class="card-title text-secondary">Discount Price:{{val.discounted_price}}$</h6>
+              <h6 class="card-title">{{val.category.name}}</h6>
+              <h6 class="card-title">{{val.description | truncatewords:20 }}</h6>
+              {% if request.user.is_authenticated %}
+              {% if request.user.account.User_Type == 'admin' %}
+                  <a class="btn btn-warning w-100 m-auto" aria-current="page" href="{% url 'EditFood' val.id %}">Manage Food</a>
+                  <a class="btn btn-danger w-100 m-auto" aria-current="page" href="{% url 'deleteFood' val.id %}">Delete Food</a>
+              {% endif %}
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            {% if request.user.account.User_Type == 'customer' %}
+                <a class="btn btn-warning w-100 m-auto" aria-current="page" href="{% url 'menu_detail' food_item_id=val.id %}">View FOOD</a>
+                <a class="btn btn-info w-100 m-auto" aria-current="page" href="{% url 'add_to_cart' val.id %}">Add Cart</a>
+            {% endif %}
+        {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+    
+    </div>
+    
+    
+    {% else %}
+      <p>No specials available.</p>
+    {% endif %}
+  </div>
+
+{% endblock content %}

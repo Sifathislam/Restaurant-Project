@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- templates/order_confirmation.html -->
+<h1 class="text-center">Order Confirmation</h1>
+<p class="text-center">Your order has been placed successfully. Thank you!</p>
+<p class="text-center">Total Cost: {{ total_cost }}</p>
+<p>{{discount}}</p>
+
+<a href="{% url 'order_history' %}" class="btn btn-info w-100">View Order History </a>
+
+{% endblock content %}
+    

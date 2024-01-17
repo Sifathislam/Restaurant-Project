@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<img src="{{food_item.image.url}}" class="w-50 h-50" alt="" srcset="">
+<h1 class="text-center text-info">Food Name:{{food_item.name}}</h1>
+<h2 class="text-center text-secondary">Food Price:{{food_item.price}}</h2>
+<p class="text-center text-dark">Description :{{food_item.description}}</p>
+<h2>Reviews</h2>
+  {% if reviews %}
+    <ul>
+      {% for review in reviews %}
+        <li>
+          Rating: {{ review.get_rating_display }} - {{ review.comment }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reviews yet.</p>
+  {% endif %}
+<a class="btn btn-info w-100 m-auto" aria-current="page" href="{% url 'add_to_cart' food_item.id %}">Add Cart</a>
+
+{% endblock %}
